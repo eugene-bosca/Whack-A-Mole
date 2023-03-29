@@ -39,61 +39,9 @@ void setup() {
   pinMode(led3, OUTPUT);
   pinMode(led4, OUTPUT);
 
-  //attachInterrupt(digitalPinToInterrupt(interruptPin), buttonPress, RISING);
+  attachInterrupt(digitalPinToInterrupt(interruptPin), buttonPress, RISING);
 }
 
-void loop() {
-  // Game setup
-  if (!gameRunning) {
-    // Game is not running, wait for button press to start
-    // Waits for all the buttons to be released so interrupt cannot occur before game starts
-    while (digitalRead(led1) || digitalRead(led2) || digitalRead(led3) || digitalRead(led4)) {}
-    Serial.println("came out");
-    gameRunning = true;
-    int score = 0;
-    //startLights();
-    Serial.println("Starting game");
-  }
-  else{
-    // Game is running
-    if(!moleActive && millis() - lastMoleTime > moleInterval) {
-      // Checks whether mole is active AND within mole interval (while LED is on)
-      Serial.println("IN ELSE FIRST IF NOW");
-      int randNumber = random(2);
-      moleActive = true;
-      switch(randNumber) {
-        case 0:
-        digitalWrite(mole1, HIGH);
-        digitalWrite(mole2, LOW);
-        Serial.println("in case 0");
-        //delay(1000);
-        //molesOff();
-        case 1:
-        digitalWrite(mole1, LOW);
-        digitalWrite(mole2, HIGH);
-        Serial.println("in case 1");
-        //delay(1000);
-        //molesOff();
-      }
-      
-      Serial.println("last mole time first:");
-      Serial.println(lastMoleTime);
-      lastMoleTime = millis();
-      Serial.println("after mole time millis");
-      Serial.println(lastMoleTime);
-    }
-    else if(moleActive && millis() - lastMoleTime > moleOffInterval) {
-      Serial.println("INSIDE HERE");
-      moleActive = false;
-      //molesOff();
-      Serial.println("inside here last mole time");
-      Serial.println(lastMoleTime);
-      lastMoleTime = millis();
-      Serial.println("inside here mole time after millis");
-      Serial.println(lastMoleTime);
-  }
-
-}
 
 // Interrupt code
 void buttonPress() {
@@ -148,5 +96,64 @@ void startLights() {
     buttonsOff();
     delay(500);
     i++;
+  }
+}
+
+void loop() {
+  // Game setup
+  if (!gameRunning) {
+    // Game is not running, wait for button press to start
+    // Waits for all the buttons to be released so interrupt cannot occur before game starts
+    while (digitalRead(led1) || digitalRead(led2) || digitalRead(led3) || digitalRead(led4)) {}
+    Serial.println("came out");
+    gameRunning = true;
+    int score = 0;
+    //startLights();
+    Serial.println("Starting game");
+  }
+  else{
+    // Game is running
+    if(!moleActive && millis() - lastMoleTime > moleInterval) {
+      // Checks whether mole is active AND within mole interval (while LED is on)
+      Serial.println("IN ELSE FIRST IF NOW");
+      int randNumber = random(2);
+      moleActive = true;
+      if(randNumber == 0){
+        digitalWrite(mole1, HIGH);
+        digitalWrite(mole2, LOW);
+        Serial.println("in case 0");
+      }
+      else if(randNumber ==1) {
+        digitalWrite(mole1, LOW);
+        digitalWrite(mole2, HIGH);
+        Serial.println("in case 1");
+      }
+      /*switch(randNumber) {
+        case 0:
+        
+        //delay(1000);
+        //molesOff();
+        case 1:
+        
+        //delay(1000);
+        //molesOff();
+      } */
+      
+      Serial.println("last mole time first:");
+      Serial.println(lastMoleTime);
+      lastMoleTime = millis();
+      Serial.println("after mole time millis");
+      Serial.println(lastMoleTime);
+    }
+    else if(moleActive && millis() - lastMoleTime > moleOffInterval) {
+      Serial.println("INSIDE HERE");
+      moleActive = false;
+      molesOff();
+      Serial.println("inside here last mole time");
+      Serial.println(lastMoleTime);
+      lastMoleTime = millis();
+      Serial.println("inside here mole time after millis");
+      Serial.println(lastMoleTime);
+    }
   }
 }
