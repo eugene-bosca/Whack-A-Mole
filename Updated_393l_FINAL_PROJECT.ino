@@ -1,7 +1,7 @@
 long randNumber;
 
 // const for interrupt pin
-const int interruptPin = 2
+const int interruptPin = 2;
 
 volatile int gamePoint = 0;
 
